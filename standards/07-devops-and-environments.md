@@ -18,8 +18,8 @@
 ## Branching
 
 - `main` = what is in `test`/`prod`. Protected: PR + 1 approval + checks.
-- Work in short-lived `feature/<ticket>-<short-description>` branches.
-- Each engineer either uses a personal feature workspace connected to their branch, or the shared dev workspace — **DECIDE**. Personal workspaces avoid people overwriting each other's work.
+- The dev workspace commits to a `dev` branch; open a PR from `dev` to `main` to release.
+- Engineers build in the shared `<domain>-dev` workspace ([ADR 0005](../adr/0005-shared-dev-workspace.md)). Revisit when a second engineer joins.
 - Reviewers use the [PR checklist](../templates/pr-checklist.md).
 
 ## Promotion
