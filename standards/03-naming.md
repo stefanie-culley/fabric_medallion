@@ -59,6 +59,8 @@ The table's description says whether it is a dimension or a fact and states its 
 | Boolean | `is_` / `has_` prefix | `is_active`, `has_discount` |
 | Date | `_date` suffix | `spend_date` |
 | Timestamp (UTC) | `_at` suffix | `converted_at` |
+| Source offset | `<timestamp>_offset` | `converted_at_offset` (`-05:00`) |
+| Source time zone | `<timestamp>_time_zone` | `converted_at_time_zone` (`America/New_York`) |
 | Amount | `_amount` suffix, currency in a separate column or in the name | `spend_amount`, `spend_amount_usd` |
 | Count / quantity | `_count` / `_quantity` | `click_count`, `lead_count` |
 | Metadata | leading underscore | `_ingested_at`, `_batch_id` |

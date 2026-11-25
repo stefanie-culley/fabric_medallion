@@ -31,6 +31,7 @@ Each layer has a contract: what it **must** do, what it **must not** do, and the
 **Must**
 - Contain one table per business entity (campaign, lead, web session), not per source file.
 - Apply correct data types, trim whitespace, standardize nulls and empty strings, and convert all timestamps to **UTC**.
+- Where local time matters, keep the source's offset or time zone in a column next to the UTC timestamp: `<name>_offset` (e.g. `-05:00`) or `<name>_time_zone` (e.g. `America/New_York`) ([ADR 0014](../adr/0014-utc-timestamps-with-offset.md)).
 - Deduplicate on the business key; the latest record by source timestamp wins.
 - Rename columns to the team standard (`snake_case`, see [03 Naming](03-naming.md)).
 - Use **MERGE** (upsert) on the business key for incremental loads.

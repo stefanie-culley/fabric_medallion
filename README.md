@@ -50,6 +50,7 @@ This repository is the team's standard for building lakehouse solutions in **Mic
 - [ADR 0011 — Starter sensitivity label mapping](adr/0011-sensitivity-label-mapping.md)
 - [ADR 0012 — Data quality checks as plain PySpark functions](adr/0012-plain-pyspark-data-quality.md)
 - [ADR 0013 — Plain English names, no type codes](adr/0013-plain-english-names.md)
+- [ADR 0014 — UTC timestamps, with an offset column where local time matters](adr/0014-utc-timestamps-with-offset.md)
 
 ## Changing the standard
 
