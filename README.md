@@ -40,6 +40,7 @@ This repository is the team's standard for building lakehouse solutions in **Mic
 - [ADR 0005 — Shared dev workspace](adr/0005-shared-dev-workspace.md)
 - [ADR 0006 — Fabric deployment pipelines for promotion](adr/0006-fabric-deployment-pipelines.md)
 - [ADR 0007 — Lakehouse schemas, lakehouses named by layer](adr/0007-lakehouse-schemas.md)
+- [ADR 0008 — Pipeline failure alerts by email](adr/0008-email-failure-alerts.md)
 
 ## Changing the standard
 

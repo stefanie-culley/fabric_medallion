@@ -42,7 +42,7 @@ A single parameterized pipeline (`pl_ingest_<source_system>`) loops over enabled
 - Independent entities in the same layer run in parallel; layers run in sequence.
 - Notebooks take parameters (`batch_id`, `load_date`, `full_refresh`) from a parameter cell, never hard-coded values.
 - Retries: 2 retries with 5-minute interval on Copy and notebook activities.
-- Failures alert the owning team (Teams/email activity on the failure path, or Fabric Activator). **DECIDE** the alert channel.
+- Failures send an email via an Office 365 Outlook activity on the failure path ([ADR 0008](../adr/0008-email-failure-alerts.md)). Include pipeline name, `batch_id`, failed activity and error message.
 
 ## Logging
 
