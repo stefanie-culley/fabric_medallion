@@ -31,7 +31,7 @@ def transform(df: DataFrame) -> DataFrame:
     ).replace("", None)
 
 def dq_split(df: DataFrame):
-    """Return (valid, quarantined). Blocking rules only; warnings go to ops.dq_result."""
+    """Return (valid, quarantined). Blocking rules only; warnings go to logging.dq_result."""
     rule = (
         F.when(F.col("customer_id").isNull(), F.lit("business_key_not_null"))
          .when(F.col("source_modified_at").isNull(), F.lit("modified_at_castable"))
@@ -99,4 +99,4 @@ log = spark.createDataFrame([(
 )], "batch_id string, pipeline_name string, notebook_name string, layer string, target_table string, "
    "started_at timestamp, ended_at timestamp, status string, rows_read long, rows_inserted long, "
    "rows_updated long, rows_deleted long, rows_quarantined long, error_message string")
-log.write.format("delta").mode("append").saveAsTable("ops.run_log")
+log.write.format("delta").mode("append").saveAsTable("logging.run_log")

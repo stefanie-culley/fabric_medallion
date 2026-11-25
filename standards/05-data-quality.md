@@ -5,7 +5,7 @@
 | Severity | Effect |
 |---|---|
 | **Blocking** | Failing rows go to `<entity>_quarantine` and are not loaded. If more than the threshold fails (default 5% of the batch), the run fails. |
-| **Warning** | Rows are loaded; the failure is logged to `ops.dq_result` and reviewed. |
+| **Warning** | Rows are loaded; the failure is logged to `logging.dq_result` and reviewed. |
 
 ## Minimum checks by layer
 
@@ -35,7 +35,7 @@ Quarantined rows are reviewed by the owning engineer. Fixed rows are reprocessed
 
 ## Results table
 
-`ops.dq_result`: `batch_id`, `table_name`, `rule_name`, `severity`, `rows_checked`, `rows_failed`, `passed`, `checked_at`.
+`logging.dq_result`: `batch_id`, `table_name`, `rule_name`, `severity`, `rows_checked`, `rows_failed`, `passed`, `checked_at`.
 
 ## Tooling
 

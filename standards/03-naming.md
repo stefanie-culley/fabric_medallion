@@ -37,7 +37,7 @@ Lakehouse schemas are enabled ([ADR 0007](../adr/0007-lakehouse-schemas.md)). Fu
 | Gold dimension | `<subject>` | `dim_<entity>` | `gold.sales.dim_customer` |
 | Gold fact | `<subject>` | `fct_<process>` | `gold.sales.fct_sales` |
 | Gold aggregate | `<subject>` | `agg_<subject>_<grain>` | `gold.sales.agg_sales_monthly` |
-| Ops / logging | `ops` | `<purpose>` | `bronze.ops.run_log`, `silver.ops.dq_result` |
+| Logging | `logging` | `<purpose>` | `bronze.logging.run_log`, `silver.logging.dq_result` |
 
 ## Columns
 
@@ -56,4 +56,4 @@ Bronze keeps source column names; only characters Delta doesn't allow (spaces, `
 
 ## Glossary of allowed abbreviations
 
-`id`, `qty`, `amt` (avoid — prefer `amount`), `pct`, `dim`, `fct`, `agg`, `ops`, `utc`, `usd`/ISO currency codes. Add to this list by PR.
+`id`, `qty`, `amt` (avoid — prefer `amount`), `pct`, `dim`, `fct`, `agg`, `utc`, `usd`/ISO currency codes. Add to this list by PR.

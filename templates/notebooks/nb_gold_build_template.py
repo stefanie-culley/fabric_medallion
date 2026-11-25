@@ -74,4 +74,4 @@ log = spark.createDataFrame([(
 )], "batch_id string, pipeline_name string, notebook_name string, layer string, target_table string, "
    "started_at timestamp, ended_at timestamp, status string, rows_read long, rows_inserted long, "
    "rows_updated long, rows_deleted long, rows_quarantined long, error_message string")
-log.write.format("delta").mode("append").saveAsTable("ops.run_log")
+log.write.format("delta").mode("append").saveAsTable("logging.run_log")
