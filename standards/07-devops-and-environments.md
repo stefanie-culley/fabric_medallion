@@ -24,7 +24,7 @@
 
 ## Promotion
 
-- Use **Fabric deployment pipelines** for dev → test → prod (or the `fabric-cicd` Python library / Fabric REST APIs from Azure DevOps or GitHub Actions if we need more automation — **DECIDE**).
+- Use **Fabric deployment pipelines** for dev → test → prod, one per domain named `dp_<domain>` ([ADR 0006](../adr/0006-fabric-deployment-pipelines.md)).
 - Use **deployment rules** / parameterization so items point to the right lakehouse in each stage. No environment names hard-coded in notebooks.
 - Deploy to prod only after test runs succeed end to end.
 - Every prod deployment has a linked PR or release note.

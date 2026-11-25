@@ -20,6 +20,7 @@ Lakehouses in every workspace: `lh_bronze`, `lh_silver`, `lh_gold`.
 | Semantic model | `sm_` | `sm_sales` |
 | Report | `rpt_` | `rpt_sales_overview` |
 | Environment (Spark) | `env_` | `env_default` |
+| Deployment pipeline | `dp_` | `dp_sales` |
 | Shortcut | same name as the target table/folder | `erp_customer` |
 
 Notebook names include the layer and entity: `nb_<layer>_<entity>` (e.g. `nb_bronze_erp_customer`, `nb_gold_fct_sales`). Shared helper notebooks: `nb_util_<purpose>`.
