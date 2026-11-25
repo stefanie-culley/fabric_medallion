@@ -46,6 +46,7 @@ This repository is the team's standard for building lakehouse solutions in **Mic
 - [ADR 0008 — Pipeline failure alerts by email](adr/0008-email-failure-alerts.md)
 - [ADR 0009 — 30-day raw file retention; sample data kept in the repo](adr/0009-raw-file-retention-and-samples.md)
 - [ADR 0010 — Generate synthetic marketing analytics sample data](adr/0010-synthetic-marketing-sample-data.md)
+- [ADR 0011 — Starter sensitivity label mapping](adr/0011-sensitivity-label-mapping.md)
 
 ## Changing the standard
 

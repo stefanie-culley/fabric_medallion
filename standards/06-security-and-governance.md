@@ -24,7 +24,7 @@ Analysts and report builders get **item-level access to `gold`** (and its semant
 - Every table that contains PII is listed in the table documentation with the PII columns named.
 - PII lands in Bronze only when needed. In Silver, mask, hash, or drop PII columns not required downstream.
 - Gold contains PII only with an approved use case.
-- Apply **Microsoft Purview sensitivity labels** to lakehouses, semantic models, and reports that hold confidential data. **DECIDE** label mapping with the governance team.
+- Apply **Microsoft Purview sensitivity labels** using the starter mapping in [ADR 0011](../adr/0011-sensitivity-label-mapping.md): **Public** for sample data, **General** for Gold without personal data, **Confidential** for `bronze`, `silver` and any Gold table with personal data. Anything built from a labeled item carries at least the same label.
 - Deletion requests (e.g. GDPR) are applied in all layers including Bronze, followed by `VACUUM` so deleted rows are physically removed.
 
 ## Secrets and connections
