@@ -39,4 +39,4 @@ Quarantined rows are reviewed by the owning engineer. Fixed rows are reprocessed
 
 ## Tooling
 
-Checks are plain PySpark functions in the shared `data_quality_checks` notebook, loaded with `%run data_quality_checks` ([ADR 0012](../adr/0012-plain-pyspark-data-quality.md)). No data quality library is used.
+Checks are plain PySpark functions in the shared [`data_quality_checks`](../templates/notebooks/data_quality_checks.py) notebook, loaded with `%run data_quality_checks` ([ADR 0012](../adr/0012-plain-pyspark-data-quality.md)). No data quality library is used.

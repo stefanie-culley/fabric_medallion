@@ -29,6 +29,7 @@ This repository is the team's standard for building lakehouse solutions in **Mic
 - [Bronze ingest notebook](templates/notebooks/bronze_load_template.py)
 - [Silver transform notebook](templates/notebooks/silver_clean_template.py)
 - [Gold build notebook](templates/notebooks/gold_build_template.py)
+- [Data quality checks notebook](templates/notebooks/data_quality_checks.py)
 - [PR checklist](templates/pr-checklist.md)
 
 ### Sample data
