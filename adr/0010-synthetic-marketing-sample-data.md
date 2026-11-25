@@ -12,7 +12,15 @@ The repo needs permanent sample data ([ADR 0009](0009-raw-file-retention-and-sam
 2. **Public dataset** — real-world shape, but licenses unclear or single-table only (e.g. UCI Bank Marketing).
 
 ## Decision
-A Python script in the repo generates synthetic marketing data into `samples/`.
+A Python script in the repo generates synthetic marketing data into `samples/`, as five CSV files across three source systems:
+
+| File | Contents |
+|---|---|
+| `samples/ads/campaign/` | Campaigns with channel, budget, start and end dates |
+| `samples/ads/ad_spend/` | Daily impressions, clicks and spend per campaign |
+| `samples/web/session/` | Website visits with traffic source and campaign |
+| `samples/crm/lead/` | Sign-ups, each linked to a web session |
+| `samples/crm/conversion/` | Leads that became customers, with revenue |
 
 ## Consequences
 - The script uses a fixed random seed so output is the same every run.
