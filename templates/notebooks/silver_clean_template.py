@@ -11,6 +11,7 @@ batch_id = "manual"
 source_table = "bronze.ads.campaign"   # <lakehouse>.<schema>.<table>
 target_table = "marketing.campaign"    # <schema>.<table> in silver
 business_key = ["campaign_id"]
+source_time_zone = "America/Los_Angeles"   # source records local time without offset (ADR 0014); from the ingestion config
 full_refresh = False
 max_fail_ratio = 0.05                  # fail the run if more than 5% of rows are quarantined
 
@@ -53,12 +54,12 @@ checks = [
 
 
 def convert_types(df: DataFrame) -> DataFrame:
-    """Convert checked text to proper types. Timestamps are UTC."""
+    """Convert checked text to proper types. Local source times are converted to UTC."""
     return (
         df.withColumn("budget", F.col("budget").cast("decimal(18,2)"))
           .withColumn("start_date", F.to_date("start_date"))
           .withColumn("end_date", F.to_date("end_date"))
-          .withColumn("source_modified_at", F.to_timestamp("source_modified_at"))
+          .withColumn("source_modified_at", F.to_utc_timestamp(F.to_timestamp("source_modified_at"), source_time_zone))
     )
 
 # %% Read Bronze: only this batch unless full refresh

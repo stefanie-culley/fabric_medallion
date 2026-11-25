@@ -19,6 +19,13 @@ SQL Server has `datetimeoffset`, which stores a time together with its UTC offse
 - Bronze keeps the original text as received, so the offset is never lost.
 - Gold derives local values (e.g. `local_hour`) from the UTC timestamp and the offset or time zone.
 
+### Sources without an offset
+Most sources record local clock time with no offset (e.g. `2026-05-01 09:15:00`).
+- Find the source's time zone from the system's settings or documentation. It is usually one zone per source.
+- Record it per source as an IANA name (`source_time_zone`, e.g. `America/New_York`) in the ingestion config, not hard-coded in notebooks.
+- Silver converts to UTC with that zone (`to_utc_timestamp`) and, where local time matters, stores the zone in `<name>_time_zone`.
+- If nobody knows the zone, **don't guess**: keep the value as `timestamp_ntz` (no time zone) and flag it in the table documentation.
+
 ## Consequences
 - Joins and sorting always use the UTC column.
 - Prefer `_time_zone` over `_offset` when the source provides it: it handles daylight saving time correctly for derived dates.

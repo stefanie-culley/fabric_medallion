@@ -32,7 +32,7 @@ Transformations are not done in Copy activities or Dataflows beyond what's neede
 
 Once a domain has more than ~5 source tables, ingestion is driven by a control table instead of one pipeline per table:
 
-`logging.ingest_config`: `source_system`, `source_object`, `target_table`, `load_pattern`, `watermark_column`, `business_key`, `is_enabled`, `schedule_group`
+`logging.ingest_config`: `source_system`, `source_object`, `target_table`, `load_pattern`, `watermark_column`, `business_key`, `source_time_zone` (IANA name, e.g. `America/New_York`; blank if the source includes offsets), `is_enabled`, `schedule_group`
 
 A single parameterized pipeline (`copy_<source_system>_to_bronze`) loops over enabled rows with a ForEach activity.
 
