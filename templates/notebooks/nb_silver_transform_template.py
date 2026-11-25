@@ -6,9 +6,9 @@
 
 # %% [parameters]
 batch_id = "manual"
-source_table = "bronze.erp.customer"   # <lakehouse>.<schema>.<table>
-target_table = "sales.customer"        # <schema>.<table> in silver
-business_key = ["customer_id"]
+source_table = "bronze.ads.campaign"    # <lakehouse>.<schema>.<table>
+target_table = "marketing.campaign"    # <schema>.<table> in silver
+business_key = ["campaign_id"]
 full_refresh = False
 max_fail_ratio = 0.05               # fail the run if more than 5% of rows are quarantined
 
@@ -23,9 +23,9 @@ started_at = datetime.now(timezone.utc)
 def transform(df: DataFrame) -> DataFrame:
     """Map Bronze columns to the Silver entity. Edit per entity."""
     return df.select(
-        F.trim(F.col("CustomerID")).alias("customer_id"),
-        F.initcap(F.trim(F.col("Name"))).alias("customer_name"),
-        F.upper(F.trim(F.col("Country"))).alias("country_code"),
+        F.trim(F.col("CampaignID")).alias("campaign_id"),
+        F.trim(F.col("CampaignName")).alias("campaign_name"),
+        F.lower(F.trim(F.col("Channel"))).alias("channel"),
         F.to_utc_timestamp(F.to_timestamp("ModifiedDate"), "UTC").alias("source_modified_at"),
         F.col("_source_system"),
     ).replace("", None)
@@ -33,7 +33,7 @@ def transform(df: DataFrame) -> DataFrame:
 def dq_split(df: DataFrame):
     """Return (valid, quarantined). Blocking rules only; warnings go to logging.dq_result."""
     rule = (
-        F.when(F.col("customer_id").isNull(), F.lit("business_key_not_null"))
+        F.when(F.col("campaign_id").isNull(), F.lit("business_key_not_null"))
          .when(F.col("source_modified_at").isNull(), F.lit("modified_at_castable"))
     )
     flagged = df.withColumn("_dq_rule", rule)

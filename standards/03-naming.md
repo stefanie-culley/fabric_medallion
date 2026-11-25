@@ -4,7 +4,7 @@ General rules: lowercase, `snake_case`, no spaces, ASCII only, no abbreviations 
 
 ## Workspaces
 
-`<domain>-<env>` — e.g. `sales-dev`, `sales-prod`. `<env>` is one of `dev`, `test`, `prod`.
+`<domain>-<env>` — e.g. `marketing-dev`, `marketing-prod`. `<env>` is one of `dev`, `test`, `prod`.
 
 Lakehouses in every workspace: `bronze`, `silver`, `gold`.
 
@@ -13,17 +13,17 @@ Lakehouses in every workspace: `bronze`, `silver`, `gold`.
 | Item | Prefix | Example |
 |---|---|---|
 | Lakehouse | none — named by layer | `bronze`, `silver`, `gold` |
-| Warehouse | `wh_` | `wh_gold_sales` |
-| Notebook | `nb_` | `nb_silver_customer` |
-| Data pipeline | `pl_` | `pl_ingest_erp`, `pl_orchestrate_sales` |
+| Warehouse | `wh_` | `wh_gold_marketing` |
+| Notebook | `nb_` | `nb_silver_campaign` |
+| Data pipeline | `pl_` | `pl_ingest_ads`, `pl_orchestrate_marketing` |
 | Dataflow Gen2 | `df_` | `df_ingest_budget_sheet` |
-| Semantic model | `sm_` | `sm_sales` |
-| Report | `rpt_` | `rpt_sales_overview` |
+| Semantic model | `sm_` | `sm_marketing` |
+| Report | `rpt_` | `rpt_campaign_performance` |
 | Environment (Spark) | `env_` | `env_default` |
-| Deployment pipeline | `dp_` | `dp_sales` |
-| Shortcut | same name as the target table/folder | `customer` |
+| Deployment pipeline | `dp_` | `dp_marketing` |
+| Shortcut | same name as the target table/folder | `campaign` |
 
-Notebook names include the layer and entity: `nb_<layer>_<entity>` (e.g. `nb_bronze_erp_customer`, `nb_gold_fct_sales`). Shared helper notebooks: `nb_util_<purpose>`.
+Notebook names include the layer and entity: `nb_<layer>_<entity>` (e.g. `nb_bronze_ads_campaign`, `nb_gold_fct_ad_spend`). Shared helper notebooks: `nb_util_<purpose>`.
 
 ## Tables
 
@@ -31,25 +31,25 @@ Lakehouse schemas are enabled ([ADR 0007](../adr/0007-lakehouse-schemas.md)). Fu
 
 | Layer | Schema | Table pattern | Example |
 |---|---|---|---|
-| Bronze | `<source_system>` | `<source_entity>` | `bronze.erp.customer`, `bronze.crm.opportunity` |
-| Silver | `<subject>` | `<entity>` (singular) | `silver.sales.customer`, `silver.sales.sales_order` |
-| Silver quarantine | `<subject>` | `<entity>_quarantine` | `silver.sales.customer_quarantine` |
-| Gold dimension | `<subject>` | `dim_<entity>` | `gold.sales.dim_customer` |
-| Gold fact | `<subject>` | `fct_<process>` | `gold.sales.fct_sales` |
-| Gold aggregate | `<subject>` | `agg_<subject>_<grain>` | `gold.sales.agg_sales_monthly` |
+| Bronze | `<source_system>` | `<source_entity>` | `bronze.ads.campaign`, `bronze.crm.lead` |
+| Silver | `<subject>` | `<entity>` (singular) | `silver.marketing.campaign`, `silver.marketing.web_session` |
+| Silver quarantine | `<subject>` | `<entity>_quarantine` | `silver.marketing.campaign_quarantine` |
+| Gold dimension | `<subject>` | `dim_<entity>` | `gold.marketing.dim_campaign` |
+| Gold fact | `<subject>` | `fct_<process>` | `gold.marketing.fct_ad_spend` |
+| Gold aggregate | `<subject>` | `agg_<subject>_<grain>` | `gold.marketing.agg_spend_monthly` |
 | Logging | `logging` | `<purpose>` | `bronze.logging.run_log`, `silver.logging.dq_result` |
 
 ## Columns
 
 | Kind | Rule | Example |
 |---|---|---|
-| Surrogate key | `<entity>_key` | `customer_key` |
-| Business / natural key | `<entity>_id` | `customer_id` |
+| Surrogate key | `<entity>_key` | `campaign_key` |
+| Business / natural key | `<entity>_id` | `campaign_id` |
 | Boolean | `is_` / `has_` prefix | `is_active`, `has_discount` |
-| Date | `_date` suffix | `order_date` |
+| Date | `_date` suffix | `spend_date` |
 | Timestamp (UTC) | `_at` suffix | `shipped_at` |
-| Amount | `_amount` suffix, currency in a separate column or in the name | `net_amount`, `net_amount_usd` |
-| Count / quantity | `_count` / `_qty` | `line_count`, `order_qty` |
+| Amount | `_amount` suffix, currency in a separate column or in the name | `spend_amount`, `spend_amount_usd` |
+| Count / quantity | `_count` / `_qty` | `click_count`, `lead_count` |
 | Metadata | leading underscore | `_ingested_at`, `_batch_id` |
 
 Bronze keeps source column names; only characters Delta doesn't allow (spaces, `,;{}()\n\t=`) are replaced with `_`.

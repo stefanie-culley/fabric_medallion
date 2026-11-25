@@ -26,10 +26,10 @@ Full rules for each layer are in [02 Layer contracts](02-layer-contracts.md).
 **One workspace per environment, one lakehouse per layer** ([ADR 0003](../adr/0003-workspace-per-environment.md)).
 
 ```
-Domain: Sales
-├── sales-dev    bronze  silver  gold  + notebooks, pipelines   (connected to Git)
-├── sales-test   bronze  silver  gold  + notebooks, pipelines   (deployed)
-└── sales-prod   bronze  silver  gold  + notebooks, pipelines   (deployed)
+Domain: Marketing
+├── marketing-dev    bronze  silver  gold  + notebooks, pipelines   (connected to Git)
+├── marketing-test   bronze  silver  gold  + notebooks, pipelines   (deployed)
+└── marketing-prod   bronze  silver  gold  + notebooks, pipelines   (deployed)
 ```
 
 - A **domain** groups a business area's workspaces.

@@ -7,8 +7,8 @@
 # %% [parameters]  -- mark this cell as the Parameters cell in Fabric
 batch_id = "manual"                 # pipeline run ID, passed by pl_orchestrate_<domain>
 load_date = "2026-01-01"            # ingest date (YYYY-MM-DD)
-source_system = "erp"
-source_entity = "customer"
+source_system = "ads"
+source_entity = "campaign"
 file_format = "csv"                 # csv | json | parquet
 target_table = f"{source_system}.{source_entity}"   # <schema>.<table>
 

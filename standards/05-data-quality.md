@@ -24,7 +24,7 @@
 **Gold** (run after the build)
 - Every fact foreign key resolves to a dimension row (including `-1` unknown) — blocking.
 - Fact grain is unique — blocking.
-- Reconciliation: key totals (e.g. sum of `net_amount` per day) match Silver within tolerance — blocking for finance metrics, warning otherwise.
+- Reconciliation: key totals (e.g. sum of `spend_amount` per day) match Silver within tolerance — blocking for spend and budget metrics, warning otherwise.
 
 ## Quarantine tables
 

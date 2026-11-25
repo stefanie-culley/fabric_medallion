@@ -20,7 +20,7 @@ Each layer has a contract: what it **must** do, what it **must not** do, and the
 | Column | Type | Meaning |
 |---|---|---|
 | `_ingested_at` | timestamp (UTC) | When this row was written to Bronze |
-| `_source_system` | string | Source system code, e.g. `erp`, `crm` |
+| `_source_system` | string | Source system code, e.g. `ads`, `crm`, `web` |
 | `_source_file` | string | File path or API endpoint the row came from (null for DB extracts) |
 | `_batch_id` | string | ID of the pipeline run that loaded the row |
 
@@ -29,7 +29,7 @@ Each layer has a contract: what it **must** do, what it **must not** do, and the
 ## Silver — "clean and conformed"
 
 **Must**
-- Contain one table per business entity (customer, order, product), not per source file.
+- Contain one table per business entity (campaign, lead, web session), not per source file.
 - Apply correct data types, trim whitespace, standardize nulls and empty strings, and convert all timestamps to **UTC**.
 - Deduplicate on the business key; the latest record by source timestamp wins.
 - Rename columns to the team standard (`snake_case`, see [03 Naming](03-naming.md)).
@@ -59,7 +59,7 @@ SCD2 tables also have `valid_from`, `valid_to` (null = current) and `is_current`
 - Be modelled as **star schemas**: `fct_` tables at a clearly documented grain, joined to `dim_` tables by surrogate keys.
 - Use integer or hash **surrogate keys** (`<entity>_key`) in dimensions; facts reference dimensions by these keys only.
 - Include an unknown member row (key `-1`) in every dimension so facts never have null foreign keys.
-- Apply business definitions (e.g. "active customer", "net revenue") **once**, here, and document them.
+- Apply business definitions (e.g. "qualified lead", "cost per acquisition") **once**, here, and document them.
 - Be the only layer exposed to semantic models, reports, and external consumers.
 
 **Must not**

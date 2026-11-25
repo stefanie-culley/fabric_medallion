@@ -13,62 +13,61 @@ from pyspark.sql import functions as F
 
 started_at = datetime.now(timezone.utc)
 
-# %% Dimension: dim_customer
-# Grain: one row per customer_id (SCD1). For SCD2 use valid_from/valid_to from Silver.
+# %% Dimension: dim_campaign
+# Grain: one row per campaign_id (SCD1). For SCD2 use valid_from/valid_to from Silver.
 # Surrogate key: stable hash of the business key, so keys don't change between rebuilds.
-customer = spark.read.table("silver.sales.customer")
+campaign = spark.read.table("silver.marketing.campaign")
 
-dim_customer = customer.select(
-    F.xxhash64("customer_id").alias("customer_key"),
-    "customer_id",
-    "customer_name",
-    "country_code",
+dim_campaign = campaign.select(
+    F.xxhash64("campaign_id").alias("campaign_key"),
+    "campaign_id",
+    "campaign_name",
+    "channel",
 )
 
 unknown = spark.createDataFrame(
-    [(-1, "UNKNOWN", "Unknown", None)],
-    "customer_key long, customer_id string, customer_name string, country_code string",
+    [(-1, "UNKNOWN", "Unknown", "unknown")],
+    "campaign_key long, campaign_id string, campaign_name string, channel string",
 )
 
-dim_customer = (
-    dim_customer.unionByName(unknown)
+dim_campaign = (
+    dim_campaign.unionByName(unknown)
     .withColumn("_updated_at", F.current_timestamp())
     .withColumn("_batch_id", F.lit(batch_id))
 )
 
-dim_customer.write.format("delta").mode("overwrite").option("overwriteSchema", "true").saveAsTable("sales.dim_customer")
+dim_campaign.write.format("delta").mode("overwrite").option("overwriteSchema", "true").saveAsTable("marketing.dim_campaign")
 
-# %% Fact: fct_sales
-# Grain: one row per sales order line.
-order_line = spark.read.table("silver.sales.sales_order_line")
-dim = spark.read.table("sales.dim_customer").select("customer_id", "customer_key")
+# %% Fact: fct_ad_spend
+# Grain: one row per campaign per day.
+ad_spend = spark.read.table("silver.marketing.ad_spend")
+dim = spark.read.table("marketing.dim_campaign").select("campaign_id", "campaign_key")
 
-fct_sales = (
-    order_line.join(dim, "customer_id", "left")
+fct_ad_spend = (
+    ad_spend.join(dim, "campaign_id", "left")
     .select(
-        "order_id",
-        "order_line_number",
-        F.coalesce("customer_key", F.lit(-1).cast("long")).alias("customer_key"),
-        F.date_format("order_date", "yyyyMMdd").cast("int").alias("order_date_key"),
-        "order_qty",
-        "net_amount",
+        F.coalesce("campaign_key", F.lit(-1).cast("long")).alias("campaign_key"),
+        F.date_format("spend_date", "yyyyMMdd").cast("int").alias("spend_date_key"),
+        "impression_count",
+        "click_count",
+        "spend_amount",
     )
     .withColumn("_updated_at", F.current_timestamp())
     .withColumn("_batch_id", F.lit(batch_id))
 )
 
 # %% Blocking DQ: grain must be unique
-dupes = fct_sales.groupBy("order_id", "order_line_number").count().filter("count > 1").count()
+dupes = fct_ad_spend.groupBy("campaign_key", "spend_date_key").count().filter("count > 1").count()
 if dupes:
-    raise ValueError(f"fct_sales grain violated: {dupes} duplicate order lines")
+    raise ValueError(f"fct_ad_spend grain violated: {dupes} duplicate campaign-days")
 
-fct_sales.write.format("delta").mode("overwrite").option("overwriteSchema", "true").saveAsTable("sales.fct_sales")
+fct_ad_spend.write.format("delta").mode("overwrite").option("overwriteSchema", "true").saveAsTable("marketing.fct_ad_spend")
 # For large facts, switch to MERGE or replaceWhere on a date range instead of full overwrite.
 
 # %% Run log
-rows = fct_sales.count()
+rows = fct_ad_spend.count()
 log = spark.createDataFrame([(
-    batch_id, None, "nb_gold_fct_sales", "gold", "fct_sales",
+    batch_id, None, "nb_gold_fct_ad_spend", "gold", "marketing.fct_ad_spend",
     started_at, datetime.now(timezone.utc), "succeeded",
     rows, rows, 0, 0, 0, None,
 )], "batch_id string, pipeline_name string, notebook_name string, layer string, target_table string, "
