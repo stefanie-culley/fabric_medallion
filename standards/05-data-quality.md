@@ -39,4 +39,4 @@ Quarantined rows are reviewed by the owning engineer. Fixed rows are reprocessed
 
 ## Tooling
 
-Checks are written as PySpark functions in the shared `nb_util_dq` notebook. **DECIDE** whether to adopt a library (e.g. Great Expectations, Soda, or `pydeequ`) once we have more than ~20 rules.
+Checks are plain PySpark functions in the shared `nb_util_dq` notebook, loaded with `%run nb_util_dq` ([ADR 0012](../adr/0012-plain-pyspark-data-quality.md)). No data quality library is used.

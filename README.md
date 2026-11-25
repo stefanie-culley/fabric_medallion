@@ -2,7 +2,7 @@
 
 This repository is the team's standard for building lakehouse solutions in **Microsoft Fabric** using the **medallion architecture** (Bronze → Silver → Gold). It defines how we structure workspaces, name things, move data between layers, test quality, secure access, and promote changes.
 
-> **Status:** Draft v0.1. Items marked **DECIDE** need a team decision before this standard is ratified. Record each decision as an ADR in [adr/](adr/).
+> **Status:** v1.0. Every decision is recorded as an ADR in [adr/](adr/).
 
 ## How to use this repo
 
@@ -47,6 +47,7 @@ This repository is the team's standard for building lakehouse solutions in **Mic
 - [ADR 0009 — 30-day raw file retention; sample data kept in the repo](adr/0009-raw-file-retention-and-samples.md)
 - [ADR 0010 — Generate synthetic marketing analytics sample data](adr/0010-synthetic-marketing-sample-data.md)
 - [ADR 0011 — Starter sensitivity label mapping](adr/0011-sensitivity-label-mapping.md)
+- [ADR 0012 — Data quality checks as plain PySpark functions](adr/0012-plain-pyspark-data-quality.md)
 
 ## Changing the standard
 
