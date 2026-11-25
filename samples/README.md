@@ -2,16 +2,26 @@
 
 Fake data for demos, tests and onboarding ([ADR 0010](../adr/0010-synthetic-marketing-sample-data.md)). No real people: IDs only, emails use the reserved `example.com` domain.
 
-Regenerate (same output every time):
+## Where the data comes from
 
-```
-python scripts/generate_sample_data.py
-```
+The [`generate_sample_data`](../templates/notebooks/generate_sample_data.py) Fabric notebook writes these files straight into the `bronze` lakehouse's Files area. Output is the same every run (fixed seed). The CSV files here are a copy of its output, so you can browse the data without Fabric.
 
 ## Layout
 
-Folders mirror `bronze/Files/`, so you can upload `samples/*` as-is:
+Folders mirror `bronze/Files/`:
 `<source_system>/<entity>/ingest_date=YYYY-MM-DD/<file>.csv`
+
+## Time zones
+
+Like real systems, the sources don't record UTC:
+
+| Source | How times are recorded | Example |
+|---|---|---|
+| `ads` | Local time in the ad account's zone, **no offset** (`America/Los_Angeles`). `Date` is a day in that zone. | `2026-05-01 03:00:48` |
+| `crm` | Local time in the CRM's zone, **no offset** (`America/New_York`) | `2026-07-01 02:02:21` |
+| `web` | Visitor's local time **with offset** | `2026-07-21T15:01:29-05:00` |
+
+Silver converts all of these to UTC ([ADR 0014](../adr/0014-utc-timestamps-with-offset.md)).
 
 Event data is one file per month (2026-05 to 2026-10), which gives incremental loads six batches to process.
 

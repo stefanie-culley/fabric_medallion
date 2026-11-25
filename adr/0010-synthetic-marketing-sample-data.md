@@ -12,7 +12,7 @@ The repo needs permanent sample data ([ADR 0009](0009-raw-file-retention-and-sam
 2. **Public dataset** — real-world shape, but licenses unclear or single-table only (e.g. UCI Bank Marketing).
 
 ## Decision
-A Python script in the repo generates synthetic marketing data into `samples/`, as five CSV files across three source systems:
+A Fabric notebook, [`generate_sample_data`](../templates/notebooks/generate_sample_data.py), generates synthetic marketing data into the `bronze` lakehouse's Files area. A copy of its output is kept in `samples/` so the data can be browsed without Fabric. Five CSV files across three source systems:
 
 | File | Contents |
 |---|---|
@@ -25,7 +25,9 @@ A Python script in the repo generates synthetic marketing data into `samples/`, 
 **Volume ("small"):** 12 campaigns over 6 months (2026-05-01 to 2026-10-31), about 20,000 web sessions, 1,500 leads and 300 conversions.
 
 ## Consequences
-- The script uses a fixed random seed so output is the same every run.
+- The notebook uses a fixed random seed so output is the same every run.
+- Generating in Fabric (not a local script) means Spark handles time zones, and the demo runs entirely in Fabric. Regenerating requires a Fabric workspace.
+- Sources record local time, not UTC (see [samples/README.md](../samples/README.md#time-zones)).
 - No real people: IDs only, and any emails use the reserved `example.com` domain.
 - Files stay small (under ~1 MB each).
 - The data can deliberately include messy rows (duplicates, nulls, bad dates) so Silver data quality rules have something to catch.
