@@ -42,6 +42,7 @@ This repository is the team's standard for building lakehouse solutions in **Mic
 - [ADR 0007 — Lakehouse schemas, lakehouses named by layer](adr/0007-lakehouse-schemas.md)
 - [ADR 0008 — Pipeline failure alerts by email](adr/0008-email-failure-alerts.md)
 - [ADR 0009 — 30-day raw file retention; sample data kept in the repo](adr/0009-raw-file-retention-and-samples.md)
+- [ADR 0010 — Generate synthetic marketing analytics sample data](adr/0010-synthetic-marketing-sample-data.md)
 
 ## Changing the standard
 
