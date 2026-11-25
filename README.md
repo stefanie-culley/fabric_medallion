@@ -1,0 +1,54 @@
+# Fabric Medallion Architecture — Data Team Standard
+
+This repository is the team's standard for building lakehouse solutions in **Microsoft Fabric** using the **medallion architecture** (Bronze → Silver → Gold). It defines how we structure workspaces, name things, move data between layers, test quality, secure access, and promote changes.
+
+> **Status:** Draft v0.1. Items marked **DECIDE** need a team decision before this standard is ratified. Record each decision as an ADR in [adr/](adr/).
+
+## How to use this repo
+
+| If you are… | Start with |
+|---|---|
+| New to the team | [01 Architecture](standards/01-architecture.md), then [02 Layer contracts](standards/02-layer-contracts.md) |
+| Building a new pipeline | [03 Naming](standards/03-naming.md), [04 Ingestion & orchestration](standards/04-ingestion-and-orchestration.md), the [templates](templates/) |
+| Reviewing a PR | [PR checklist](templates/pr-checklist.md) |
+| Setting up an environment | [07 DevOps & environments](standards/07-devops-and-environments.md), [08 Trial & cost](standards/08-trial-and-cost.md) |
+
+## Contents
+
+### Standards
+1. [Architecture](standards/01-architecture.md) — layers, workspaces, item types
+2. [Layer contracts](standards/02-layer-contracts.md) — what each layer must and must not contain
+3. [Naming conventions](standards/03-naming.md) — workspaces, items, tables, columns
+4. [Ingestion & orchestration](standards/04-ingestion-and-orchestration.md) — load patterns, idempotency, scheduling
+5. [Data quality](standards/05-data-quality.md) — checks, quarantine, run logging
+6. [Security & governance](standards/06-security-and-governance.md) — roles, PII, secrets
+7. [DevOps & environments](standards/07-devops-and-environments.md) — Git integration, branching, deployment
+8. [Trial & cost](standards/08-trial-and-cost.md) — getting started without a paid capacity
+
+### Templates
+- [Bronze ingest notebook](templates/notebooks/nb_bronze_ingest_template.py)
+- [Silver transform notebook](templates/notebooks/nb_silver_transform_template.py)
+- [Gold build notebook](templates/notebooks/nb_gold_build_template.py)
+- [PR checklist](templates/pr-checklist.md)
+
+### Decisions
+- [ADR template](adr/0000-template.md)
+- [ADR 0001 — Adopt medallion architecture in Fabric](adr/0001-adopt-medallion-in-fabric.md)
+- [ADR 0002 — Gold layer uses a Lakehouse](adr/0002-gold-on-lakehouse.md)
+- [ADR 0003 — One workspace per environment, one lakehouse per layer](adr/0003-workspace-per-environment.md)
+- [ADR 0004 — GitHub for source control](adr/0004-github-for-source-control.md)
+
+## Changing the standard
+
+Changes go through a pull request. Anything that changes a rule (not just wording) needs an ADR and approval from at least two team members.
+
+## License
+
+[MIT](LICENSE). Free to reuse and adapt with attribution.
+
+## References
+- [Implement medallion lakehouse architecture in Fabric](https://learn.microsoft.com/en-us/fabric/onelake/onelake-medallion-lakehouse-architecture)
+- [Lakehouse end-to-end tutorial](https://learn.microsoft.com/en-us/fabric/data-engineering/tutorial-lakehouse-introduction)
+- [Data Factory in Fabric](https://learn.microsoft.com/en-us/fabric/data-factory/data-factory-overview)
+- [Fabric trial](https://learn.microsoft.com/en-us/fabric/fundamentals/fabric-trial)
+- [Fabric training on Microsoft Learn](https://learn.microsoft.com/en-us/training/browse/?products=fabric)
