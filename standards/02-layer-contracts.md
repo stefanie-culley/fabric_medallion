@@ -24,7 +24,7 @@ Each layer has a contract: what it **must** do, what it **must not** do, and the
 | `_source_file` | string | File path or API endpoint the row came from (null for DB extracts) |
 | `_batch_id` | string | ID of the pipeline run that loaded the row |
 
-**Retention:** Raw files kept for **DECIDE** (suggest 90 days in `Files/`); Bronze Delta tables kept indefinitely unless a source-specific policy says otherwise.
+**Retention:** Raw files in `Files/` are kept for **30 days**; Bronze Delta tables are kept indefinitely unless a source-specific policy says otherwise. Permanent sample data lives in the repo under `samples/` ([ADR 0009](../adr/0009-raw-file-retention-and-samples.md)).
 
 ## Silver — "clean and conformed"
 

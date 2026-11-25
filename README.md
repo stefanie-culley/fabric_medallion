@@ -41,6 +41,7 @@ This repository is the team's standard for building lakehouse solutions in **Mic
 - [ADR 0006 — Fabric deployment pipelines for promotion](adr/0006-fabric-deployment-pipelines.md)
 - [ADR 0007 — Lakehouse schemas, lakehouses named by layer](adr/0007-lakehouse-schemas.md)
 - [ADR 0008 — Pipeline failure alerts by email](adr/0008-email-failure-alerts.md)
+- [ADR 0009 — 30-day raw file retention; sample data kept in the repo](adr/0009-raw-file-retention-and-samples.md)
 
 ## Changing the standard
 
