@@ -18,7 +18,7 @@ Transformations are not done in Copy activities or Dataflows beyond what's neede
 | Pattern | When | How |
 |---|---|---|
 | Full load | Small reference tables (< ~1M rows) or sources without a reliable change column | Bronze: append whole extract with new `_batch_id`. Silver: MERGE on business key, then handle deletes (rows missing from the latest batch). |
-| Incremental (watermark) | Source has a reliable `modified_at` or increasing ID | Store the high watermark in `ops_watermark`; extract `> last watermark`; update the watermark **only after** the Silver load succeeds. |
+| Incremental (watermark) | Source has a reliable `modified_at` or increasing ID | Store the high watermark in `ops.watermark`; extract `> last watermark`; update the watermark **only after** the Silver load succeeds. |
 | Change data capture | Source provides CDC or change tracking | Land change records in Bronze; apply inserts/updates/deletes in Silver via MERGE. |
 
 ## Idempotency rules
@@ -32,7 +32,7 @@ Transformations are not done in Copy activities or Dataflows beyond what's neede
 
 Once a domain has more than ~5 source tables, ingestion is driven by a control table instead of one pipeline per table:
 
-`ops_ingest_config`: `source_system`, `source_object`, `target_table`, `load_pattern`, `watermark_column`, `business_key`, `is_enabled`, `schedule_group`
+`ops.ingest_config`: `source_system`, `source_object`, `target_table`, `load_pattern`, `watermark_column`, `business_key`, `is_enabled`, `schedule_group`
 
 A single parameterized pipeline (`pl_ingest_<source_system>`) loops over enabled rows with a ForEach activity.
 
@@ -46,7 +46,7 @@ A single parameterized pipeline (`pl_ingest_<source_system>`) loops over enabled
 
 ## Logging
 
-Every notebook writes one row per run to `ops_run_log`:
+Every notebook writes one row per run to `ops.run_log`:
 
 `batch_id`, `pipeline_name`, `notebook_name`, `layer`, `target_table`, `started_at`, `ended_at`, `status`, `rows_read`, `rows_inserted`, `rows_updated`, `rows_deleted`, `rows_quarantined`, `error_message`
 

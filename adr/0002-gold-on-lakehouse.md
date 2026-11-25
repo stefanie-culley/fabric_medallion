@@ -12,7 +12,7 @@ Gold could be stored in a Fabric Lakehouse or a Fabric Warehouse.
 2. **Warehouse** — full T-SQL read/write; better fit for SQL-first teams.
 
 ## Decision
-Gold uses a Lakehouse (`lh_gold`).
+Gold uses a Lakehouse (`gold`).
 
 ## Consequences
 - All layers are built with Spark notebooks; one skill set and one pattern.

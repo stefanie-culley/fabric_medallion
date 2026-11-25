@@ -1,6 +1,6 @@
 # Template: Bronze ingest notebook  (nb_bronze_<source_system>_<entity>)
 # Copy into a Fabric notebook; each "# %%" block is one cell.
-# Default lakehouse: lh_bronze
+# Default lakehouse: bronze
 # Contract: append-only, data as received, required metadata columns.
 # See standards/02-layer-contracts.md
 
@@ -10,7 +10,7 @@ load_date = "2026-01-01"            # ingest date (YYYY-MM-DD)
 source_system = "erp"
 source_entity = "customer"
 file_format = "csv"                 # csv | json | parquet
-target_table = f"{source_system}_{source_entity}"
+target_table = f"{source_system}.{source_entity}"   # <schema>.<table>
 
 # %%
 from datetime import datetime, timezone
@@ -54,14 +54,14 @@ if rows_read == 0:
    .option("mergeSchema", "true")   # new source columns are allowed in Bronze; DQ flags them
    .saveAsTable(target_table))
 
-# %% Run log  (ops_run_log lives in lh_bronze for Bronze runs; adjust to your layout)
+# %% Run log  (ops.run_log in the default lakehouse)
 log = spark.createDataFrame([(
-    batch_id, None, f"nb_bronze_{target_table}", "bronze", target_table,
+    batch_id, None, f"nb_bronze_{source_system}_{source_entity}", "bronze", target_table,
     started_at, datetime.now(timezone.utc), "succeeded",
     rows_read, rows_read, 0, 0, 0, None,
 )], "batch_id string, pipeline_name string, notebook_name string, layer string, target_table string, "
    "started_at timestamp, ended_at timestamp, status string, rows_read long, rows_inserted long, "
    "rows_updated long, rows_deleted long, rows_quarantined long, error_message string")
-log.write.format("delta").mode("append").saveAsTable("ops_run_log")
+log.write.format("delta").mode("append").saveAsTable("ops.run_log")
 
 notebookutils.notebook.exit(str(rows_read))

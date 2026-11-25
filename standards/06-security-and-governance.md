@@ -9,7 +9,7 @@
 | Contributor | Data & analytics engineers | — (deployment pipeline only) |
 | Viewer | — | — |
 
-Analysts and report builders get **item-level access to `lh_gold`** (and its semantic models), not a workspace role, because a workspace role would also expose `lh_bronze` and `lh_silver`.
+Analysts and report builders get **item-level access to `gold`** (and its semantic models), not a workspace role, because a workspace role would also expose `bronze` and `silver`.
 
 - Assign roles to **Entra ID security groups**, never to individual users.
 - Production workspaces: only the deployment pipeline / service principal and platform leads have write access. Engineers change prod through Git + deployment, not by editing in prod.

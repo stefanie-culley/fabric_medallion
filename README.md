@@ -39,6 +39,7 @@ This repository is the team's standard for building lakehouse solutions in **Mic
 - [ADR 0004 — GitHub for source control](adr/0004-github-for-source-control.md)
 - [ADR 0005 — Shared dev workspace](adr/0005-shared-dev-workspace.md)
 - [ADR 0006 — Fabric deployment pipelines for promotion](adr/0006-fabric-deployment-pipelines.md)
+- [ADR 0007 — Lakehouse schemas, lakehouses named by layer](adr/0007-lakehouse-schemas.md)
 
 ## Changing the standard
 

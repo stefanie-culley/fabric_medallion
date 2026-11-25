@@ -14,7 +14,7 @@ Copy into the PR description and tick each item, or explain why it doesn't apply
 ## Reliability
 - [ ] Re-running with the same parameters gives the same result (idempotent)
 - [ ] No hard-coded environment names, dates, or paths — parameters only
-- [ ] Writes to `ops_run_log`
+- [ ] Writes to `ops.run_log`
 - [ ] Watermark updated only after a successful write
 
 ## Quality

@@ -32,4 +32,4 @@
 ## Testing
 
 - Unit test transformation functions (pure PySpark functions) with small in-memory DataFrames. Keep business logic in functions, not inline cells, so it can be tested.
-- Integration test: run the domain orchestration pipeline in `test` and check `ops_run_log` and `ops_dq_result`.
+- Integration test: run the domain orchestration pipeline in `test` and check `ops.run_log` and `ops.dq_result`.

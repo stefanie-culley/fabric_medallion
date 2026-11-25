@@ -27,15 +27,15 @@ Full rules for each layer are in [02 Layer contracts](02-layer-contracts.md).
 
 ```
 Domain: Sales
-├── sales-dev    lh_bronze  lh_silver  lh_gold  + notebooks, pipelines   (connected to Git)
-├── sales-test   lh_bronze  lh_silver  lh_gold  + notebooks, pipelines   (deployed)
-└── sales-prod   lh_bronze  lh_silver  lh_gold  + notebooks, pipelines   (deployed)
+├── sales-dev    bronze  silver  gold  + notebooks, pipelines   (connected to Git)
+├── sales-test   bronze  silver  gold  + notebooks, pipelines   (deployed)
+└── sales-prod   bronze  silver  gold  + notebooks, pipelines   (deployed)
 ```
 
 - A **domain** groups a business area's workspaces.
 - A **workspace** holds one version of each item, so each environment needs its own.
 - Changes move dev → test → prod with a Fabric deployment pipeline (see [07 DevOps](07-devops-and-environments.md)).
-- Analysts who should only see Gold get item-level access to `lh_gold`, not a workspace role.
+- Analysts who should only see Gold get item-level access to `gold`, not a workspace role.
 
 ## Item responsibilities
 

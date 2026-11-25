@@ -1,6 +1,6 @@
 # Template: Gold build notebook  (nb_gold_dim_<entity> / nb_gold_fct_<process>)
 # Copy into a Fabric notebook; each "# %%" block is one cell.
-# Default lakehouse: lh_gold. Silver tables available via shortcuts.
+# Default lakehouse: gold (schemas enabled). Reads silver by its full name in the same workspace.
 # Contract: star schema, surrogate keys, unknown member (-1), documented grain.
 # See standards/02-layer-contracts.md
 
@@ -16,7 +16,7 @@ started_at = datetime.now(timezone.utc)
 # %% Dimension: dim_customer
 # Grain: one row per customer_id (SCD1). For SCD2 use valid_from/valid_to from Silver.
 # Surrogate key: stable hash of the business key, so keys don't change between rebuilds.
-customer = spark.read.table("customer")
+customer = spark.read.table("silver.sales.customer")
 
 dim_customer = customer.select(
     F.xxhash64("customer_id").alias("customer_key"),
@@ -36,12 +36,12 @@ dim_customer = (
     .withColumn("_batch_id", F.lit(batch_id))
 )
 
-dim_customer.write.format("delta").mode("overwrite").option("overwriteSchema", "true").saveAsTable("dim_customer")
+dim_customer.write.format("delta").mode("overwrite").option("overwriteSchema", "true").saveAsTable("sales.dim_customer")
 
 # %% Fact: fct_sales
 # Grain: one row per sales order line.
-order_line = spark.read.table("sales_order_line")
-dim = spark.read.table("dim_customer").select("customer_id", "customer_key")
+order_line = spark.read.table("silver.sales.sales_order_line")
+dim = spark.read.table("sales.dim_customer").select("customer_id", "customer_key")
 
 fct_sales = (
     order_line.join(dim, "customer_id", "left")
@@ -62,7 +62,7 @@ dupes = fct_sales.groupBy("order_id", "order_line_number").count().filter("count
 if dupes:
     raise ValueError(f"fct_sales grain violated: {dupes} duplicate order lines")
 
-fct_sales.write.format("delta").mode("overwrite").option("overwriteSchema", "true").saveAsTable("fct_sales")
+fct_sales.write.format("delta").mode("overwrite").option("overwriteSchema", "true").saveAsTable("sales.fct_sales")
 # For large facts, switch to MERGE or replaceWhere on a date range instead of full overwrite.
 
 # %% Run log
@@ -74,4 +74,4 @@ log = spark.createDataFrame([(
 )], "batch_id string, pipeline_name string, notebook_name string, layer string, target_table string, "
    "started_at timestamp, ended_at timestamp, status string, rows_read long, rows_inserted long, "
    "rows_updated long, rows_deleted long, rows_quarantined long, error_message string")
-log.write.format("delta").mode("append").saveAsTable("ops_run_log")
+log.write.format("delta").mode("append").saveAsTable("ops.run_log")

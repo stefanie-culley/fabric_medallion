@@ -1,13 +1,13 @@
 # Template: Silver transform notebook  (nb_silver_<entity>)
 # Copy into a Fabric notebook; each "# %%" block is one cell.
-# Default lakehouse: lh_silver. Bronze table available via shortcut (or attached lakehouse).
+# Default lakehouse: silver (schemas enabled). Reads bronze by its full name in the same workspace.
 # Contract: typed, UTC, deduplicated on business key, MERGE, quarantine for blocking DQ failures.
 # See standards/02-layer-contracts.md and standards/05-data-quality.md
 
 # %% [parameters]
 batch_id = "manual"
-source_table = "erp_customer"       # Bronze table (shortcut name)
-target_table = "customer"
+source_table = "bronze.erp.customer"   # <lakehouse>.<schema>.<table>
+target_table = "sales.customer"        # <schema>.<table> in silver
 business_key = ["customer_id"]
 full_refresh = False
 max_fail_ratio = 0.05               # fail the run if more than 5% of rows are quarantined
@@ -31,7 +31,7 @@ def transform(df: DataFrame) -> DataFrame:
     ).replace("", None)
 
 def dq_split(df: DataFrame):
-    """Return (valid, quarantined). Blocking rules only; warnings go to ops_dq_result."""
+    """Return (valid, quarantined). Blocking rules only; warnings go to ops.dq_result."""
     rule = (
         F.when(F.col("customer_id").isNull(), F.lit("business_key_not_null"))
          .when(F.col("source_modified_at").isNull(), F.lit("modified_at_castable"))
@@ -93,10 +93,10 @@ else:
 
 # %% Run log
 log = spark.createDataFrame([(
-    batch_id, None, f"nb_silver_{target_table}", "silver", target_table,
+    batch_id, None, f"nb_silver_{target_table.split('.')[-1]}", "silver", target_table,
     started_at, datetime.now(timezone.utc), "succeeded",
     rows_read, rows_inserted, rows_updated, 0, rows_quarantined, None,
 )], "batch_id string, pipeline_name string, notebook_name string, layer string, target_table string, "
    "started_at timestamp, ended_at timestamp, status string, rows_read long, rows_inserted long, "
    "rows_updated long, rows_deleted long, rows_quarantined long, error_message string")
-log.write.format("delta").mode("append").saveAsTable("ops_run_log")
+log.write.format("delta").mode("append").saveAsTable("ops.run_log")
