@@ -22,6 +22,8 @@ A Python script in the repo generates synthetic marketing data into `samples/`, 
 | `samples/crm/lead/` | Sign-ups, each linked to a web session |
 | `samples/crm/conversion/` | Leads that became customers, with revenue |
 
+**Volume ("small"):** 12 campaigns over 6 months (2026-05-01 to 2026-10-31), about 20,000 web sessions, 1,500 leads and 300 conversions.
+
 ## Consequences
 - The script uses a fixed random seed so output is the same every run.
 - No real people: IDs only, and any emails use the reserved `example.com` domain.
