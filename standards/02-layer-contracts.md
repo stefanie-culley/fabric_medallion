@@ -56,7 +56,7 @@ SCD2 tables also have `valid_from`, `valid_to` (null = current) and `is_current`
 ## Gold — "business ready"
 
 **Must**
-- Be modelled as **star schemas**: `fct_` tables at a clearly documented grain, joined to `dim_` tables by surrogate keys.
+- Be modelled as **star schemas**: fact tables (events, named `<event>_<grain>`, e.g. `ad_spend_daily`) at a clearly documented grain, joined to dimension tables (things, e.g. `campaign`) by surrogate keys.
 - Use integer or hash **surrogate keys** (`<entity>_key`) in dimensions; facts reference dimensions by these keys only.
 - Include an unknown member row (key `-1`) in every dimension so facts never have null foreign keys.
 - Apply business definitions (e.g. "qualified lead", "cost per acquisition") **once**, here, and document them.

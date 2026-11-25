@@ -12,7 +12,7 @@ Changes must move from `<domain>-dev` to `<domain>-test` to `<domain>-prod`.
 2. **`fabric-cicd` + GitHub Actions** — fully automated from Git; we write and maintain the automation.
 
 ## Decision
-Fabric deployment pipelines. One pipeline per domain (`dp_<domain>`) with stages dev → test → prod.
+Fabric deployment pipelines. One pipeline per domain (`<domain>_deployment`) with stages dev → test → prod.
 
 ## Consequences
 - No CI/CD code to maintain.

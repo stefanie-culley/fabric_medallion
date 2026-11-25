@@ -13,8 +13,8 @@ Tables in a lakehouse can sit in one flat list or be grouped into schemas. Lakeh
 
 ## Decision
 - Create every lakehouse with schemas enabled.
-- Bronze schemas are per source system (`bronze.ads.campaign`); Silver and Gold schemas are per subject (`silver.marketing.campaign`, `gold.marketing.fct_ad_spend`).
-- Operational tables live in a `logging` schema (`logging.run_log`, `logging.dq_result`).
+- Bronze schemas are per source system (`bronze.ads.campaign`); Silver and Gold schemas are per subject (`silver.marketing.campaign`, `gold.marketing.ad_spend_daily`).
+- Operational tables live in a `logging` schema (`logging.run_log`, `logging.data_quality_result`).
 - Lakehouses are named `bronze`, `silver`, `gold` with no `lh_` prefix.
 
 ## Consequences

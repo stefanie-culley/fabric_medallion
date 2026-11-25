@@ -24,7 +24,7 @@
 
 ## Promotion
 
-- Use **Fabric deployment pipelines** for dev → test → prod, one per domain named `dp_<domain>` ([ADR 0006](../adr/0006-fabric-deployment-pipelines.md)).
+- Use **Fabric deployment pipelines** for dev → test → prod, one per domain named `<domain>_deployment` ([ADR 0006](../adr/0006-fabric-deployment-pipelines.md)).
 - Use **deployment rules** / parameterization so items point to the right lakehouse in each stage. No environment names hard-coded in notebooks.
 - Deploy to prod only after test runs succeed end to end.
 - Every prod deployment has a linked PR or release note.
@@ -32,4 +32,4 @@
 ## Testing
 
 - Unit test transformation functions (pure PySpark functions) with small in-memory DataFrames. Keep business logic in functions, not inline cells, so it can be tested.
-- Integration test: run the domain orchestration pipeline in `test` and check `logging.run_log` and `logging.dq_result`.
+- Integration test: run the domain orchestration pipeline in `test` and check `logging.run_log` and `logging.data_quality_result`.

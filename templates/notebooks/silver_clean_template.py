@@ -1,4 +1,4 @@
-# Template: Silver transform notebook  (nb_silver_<entity>)
+# Template: Silver transform notebook  (silver_clean_<entity>)
 # Copy into a Fabric notebook; each "# %%" block is one cell.
 # Default lakehouse: silver (schemas enabled). Reads bronze by its full name in the same workspace.
 # Contract: typed, UTC, deduplicated on business key, MERGE, quarantine for blocking DQ failures.
@@ -30,15 +30,15 @@ def transform(df: DataFrame) -> DataFrame:
         F.col("_source_system"),
     ).replace("", None)
 
-def dq_split(df: DataFrame):
-    """Return (valid, quarantined). Blocking rules only; warnings go to logging.dq_result."""
+def split_by_data_quality(df: DataFrame):
+    """Return (valid, quarantined). Blocking rules only; warnings go to logging.data_quality_result."""
     rule = (
         F.when(F.col("campaign_id").isNull(), F.lit("business_key_not_null"))
          .when(F.col("source_modified_at").isNull(), F.lit("modified_at_castable"))
     )
-    flagged = df.withColumn("_dq_rule", rule)
-    valid = flagged.filter(F.col("_dq_rule").isNull()).drop("_dq_rule")
-    bad = flagged.filter(F.col("_dq_rule").isNotNull())
+    flagged = df.withColumn("_failed_rule", rule)
+    valid = flagged.filter(F.col("_failed_rule").isNull()).drop("_failed_rule")
+    bad = flagged.filter(F.col("_failed_rule").isNotNull())
     return valid, bad
 
 # %% Read Bronze: only this batch unless full refresh
@@ -53,12 +53,12 @@ df = transform(bronze)
 w = Window.partitionBy(*business_key).orderBy(F.col("source_modified_at").desc_nulls_last())
 df = df.withColumn("_rn", F.row_number().over(w)).filter("_rn = 1").drop("_rn")
 
-valid, bad = dq_split(df)
+valid, bad = split_by_data_quality(df)
 
 # %% Quarantine
 rows_quarantined = bad.count()
 if rows_quarantined:
-    (bad.withColumn("_dq_message", F.lit(None).cast("string"))
+    (bad.withColumn("_failure_message", F.lit(None).cast("string"))
         .withColumn("_quarantined_at", F.current_timestamp())
         .withColumn("_batch_id", F.lit(batch_id))
         .write.format("delta").mode("append").option("mergeSchema", "true")
@@ -93,7 +93,7 @@ else:
 
 # %% Run log
 log = spark.createDataFrame([(
-    batch_id, None, f"nb_silver_{target_table.split('.')[-1]}", "silver", target_table,
+    batch_id, None, f"silver_clean_{target_table.split('.')[-1]}", "silver", target_table,
     started_at, datetime.now(timezone.utc), "succeeded",
     rows_read, rows_inserted, rows_updated, 0, rows_quarantined, None,
 )], "batch_id string, pipeline_name string, notebook_name string, layer string, target_table string, "

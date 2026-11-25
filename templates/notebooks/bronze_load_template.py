@@ -1,11 +1,11 @@
-# Template: Bronze ingest notebook  (nb_bronze_<source_system>_<entity>)
+# Template: Bronze ingest notebook  (bronze_load_<source_system>_<entity>)
 # Copy into a Fabric notebook; each "# %%" block is one cell.
 # Default lakehouse: bronze
 # Contract: append-only, data as received, required metadata columns.
 # See standards/02-layer-contracts.md
 
 # %% [parameters]  -- mark this cell as the Parameters cell in Fabric
-batch_id = "manual"                 # pipeline run ID, passed by pl_orchestrate_<domain>
+batch_id = "manual"                 # pipeline run ID, passed by <domain>_daily_run
 load_date = "2026-01-01"            # ingest date (YYYY-MM-DD)
 source_system = "ads"
 source_entity = "campaign"
@@ -56,7 +56,7 @@ if rows_read == 0:
 
 # %% Run log  (logging.run_log in the default lakehouse)
 log = spark.createDataFrame([(
-    batch_id, None, f"nb_bronze_{source_system}_{source_entity}", "bronze", target_table,
+    batch_id, None, f"bronze_load_{source_system}_{source_entity}", "bronze", target_table,
     started_at, datetime.now(timezone.utc), "succeeded",
     rows_read, rows_read, 0, 0, 0, None,
 )], "batch_id string, pipeline_name string, notebook_name string, layer string, target_table string, "

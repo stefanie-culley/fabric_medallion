@@ -26,9 +26,9 @@ This repository is the team's standard for building lakehouse solutions in **Mic
 8. [Trial & cost](standards/08-trial-and-cost.md) — getting started without a paid capacity
 
 ### Templates
-- [Bronze ingest notebook](templates/notebooks/nb_bronze_ingest_template.py)
-- [Silver transform notebook](templates/notebooks/nb_silver_transform_template.py)
-- [Gold build notebook](templates/notebooks/nb_gold_build_template.py)
+- [Bronze ingest notebook](templates/notebooks/bronze_load_template.py)
+- [Silver transform notebook](templates/notebooks/silver_clean_template.py)
+- [Gold build notebook](templates/notebooks/gold_build_template.py)
 - [PR checklist](templates/pr-checklist.md)
 
 ### Sample data
@@ -48,6 +48,7 @@ This repository is the team's standard for building lakehouse solutions in **Mic
 - [ADR 0010 — Generate synthetic marketing analytics sample data](adr/0010-synthetic-marketing-sample-data.md)
 - [ADR 0011 — Starter sensitivity label mapping](adr/0011-sensitivity-label-mapping.md)
 - [ADR 0012 — Data quality checks as plain PySpark functions](adr/0012-plain-pyspark-data-quality.md)
+- [ADR 0013 — Plain English names, no type codes](adr/0013-plain-english-names.md)
 
 ## Changing the standard
 

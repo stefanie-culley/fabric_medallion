@@ -34,11 +34,11 @@ Once a domain has more than ~5 source tables, ingestion is driven by a control t
 
 `logging.ingest_config`: `source_system`, `source_object`, `target_table`, `load_pattern`, `watermark_column`, `business_key`, `is_enabled`, `schedule_group`
 
-A single parameterized pipeline (`pl_ingest_<source_system>`) loops over enabled rows with a ForEach activity.
+A single parameterized pipeline (`copy_<source_system>_to_bronze`) loops over enabled rows with a ForEach activity.
 
 ## Orchestration
 
-- One orchestration pipeline per domain: `pl_orchestrate_<domain>`. It calls, in order: ingest pipelines → Silver notebooks → Gold notebooks → semantic model refresh (if not Direct Lake).
+- One orchestration pipeline per domain: `<domain>_daily_run`. It calls, in order: ingest pipelines → Silver notebooks → Gold notebooks → semantic model refresh (if not Direct Lake).
 - Independent entities in the same layer run in parallel; layers run in sequence.
 - Notebooks take parameters (`batch_id`, `load_date`, `full_refresh`) from a parameter cell, never hard-coded values.
 - Retries: 2 retries with 5-minute interval on Copy and notebook activities.
@@ -54,5 +54,5 @@ The templates in [templates/notebooks/](../templates/notebooks/) include this.
 
 ## Spark settings
 
-- Use a shared Spark **Environment** (`env_default`) for library versions; don't `%pip install` in production notebooks.
+- Use a shared Spark **Environment** (`default_spark_environment`) for library versions; don't `%pip install` in production notebooks.
 - Start with the starter pool; move to a custom pool only with evidence (run times, failures).

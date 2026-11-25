@@ -5,7 +5,7 @@
 | Severity | Effect |
 |---|---|
 | **Blocking** | Failing rows go to `<entity>_quarantine` and are not loaded. If more than the threshold fails (default 5% of the batch), the run fails. |
-| **Warning** | Rows are loaded; the failure is logged to `logging.dq_result` and reviewed. |
+| **Warning** | Rows are loaded; the failure is logged to `logging.data_quality_result` and reviewed. |
 
 ## Minimum checks by layer
 
@@ -29,14 +29,14 @@
 ## Quarantine tables
 
 `<entity>_quarantine` has the same columns as the Silver input plus:
-`_dq_rule`, `_dq_message`, `_quarantined_at`, `_batch_id`.
+`_failed_rule`, `_failure_message`, `_quarantined_at`, `_batch_id`.
 
 Quarantined rows are reviewed by the owning engineer. Fixed rows are reprocessed by re-running the Silver notebook for that batch. They are never edited in place.
 
 ## Results table
 
-`logging.dq_result`: `batch_id`, `table_name`, `rule_name`, `severity`, `rows_checked`, `rows_failed`, `passed`, `checked_at`.
+`logging.data_quality_result`: `batch_id`, `table_name`, `rule_name`, `severity`, `rows_checked`, `rows_failed`, `passed`, `checked_at`.
 
 ## Tooling
 
-Checks are plain PySpark functions in the shared `nb_util_dq` notebook, loaded with `%run nb_util_dq` ([ADR 0012](../adr/0012-plain-pyspark-data-quality.md)). No data quality library is used.
+Checks are plain PySpark functions in the shared `data_quality_checks` notebook, loaded with `%run data_quality_checks` ([ADR 0012](../adr/0012-plain-pyspark-data-quality.md)). No data quality library is used.

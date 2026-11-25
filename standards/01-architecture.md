@@ -56,10 +56,17 @@ Notebooks in the Silver workspace read Bronze through **OneLake shortcuts** or b
 ## Diagram
 
 ```
- Sources                Bronze                 Silver                 Gold                  Consumers
- ───────              ──────────             ──────────             ──────────             ─────────
- SQL DBs   ─┐        Files/ (raw)          cleansed entity       dim_* / fct_*         Semantic models
- APIs      ─┼─ pl_ ─▶ Tables/ (Delta,  ─nb_▶ tables (typed,   ─nb_▶ star schemas,   ──▶  Power BI reports
- Files     ─┤        append-only)          deduped, MERGE)       aggregates            SQL endpoint
- SaaS      ─┘        + _meta columns       + quarantine          + business logic      Exports
+Sources    SQL databases, APIs, files, SaaS apps
+   │ copy
+   ▼
+Bronze     raw, as received, append-only
+   │ clean
+   ▼
+Silver     typed, deduplicated, MERGE, quarantine
+   │ build
+   ▼
+Gold       dimensions and facts, business logic
+   │
+   ▼
+Consumers  reports, semantic models, SQL endpoint
 ```
