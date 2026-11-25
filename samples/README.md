@@ -19,7 +19,7 @@ Event data is one file per month (2026-05 to 2026-10), which gives incremental l
 |---|---|---|---|
 | `ads/campaign` | 13 | `CampaignID` | Campaigns: name, channel, budget, start/end dates |
 | `ads/ad_spend` | ~570 | `CampaignID` + `Date` | Daily impressions, clicks, spend (no rows for email campaigns) |
-| `web/session` | ~20,100 | `SessionID` | Website visits: traffic source, medium, campaign (blank = organic/direct), device |
+| `web/session` | ~20,100 | `SessionID` | Website visits in the visitor's local time with UTC offset (e.g. `2026-07-21T15:01:29-05:00`): traffic source, medium, campaign (blank = organic/direct), device |
 | `crm/lead` | ~1,500 | `LeadID` | Sign-ups, each linked to a `SessionID` |
 | `crm/conversion` | 300 | `ConversionID` | Leads that became customers: plan, revenue (USD) |
 
@@ -38,7 +38,7 @@ These are there on purpose so Silver checks have something to catch. Don't "fix"
 | ad_spend | One exact duplicate row | Dedup |
 | session | 100 exact duplicate rows | Dedup |
 | session | 50 rows with blank `SessionID` | Business key not null → quarantine |
-| session | 50 rows with `SessionStartUtc = "not available"` | Cast check → quarantine |
+| session | 50 rows with `SessionStart = "not available"` | Cast check → quarantine |
 | lead | 15 emails in upper case with spaces | Trim + lowercase |
 | lead | 15 rows with blank `CountryCode` | Warning |
 | lead | One duplicate row | Dedup |

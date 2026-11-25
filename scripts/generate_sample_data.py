@@ -40,12 +40,20 @@ THEMES = ["Summer Launch", "Brand Awareness", "Retargeting", "Webinar Promo",
 ORGANIC_SOURCES = [("google", "organic"), ("direct", "none"), ("linkedin", "referral"),
                    ("bing", "organic")]
 DEVICES = ["desktop", "mobile", "tablet"]
+# Visitor UTC offsets (minutes) and weights. Sessions are recorded in the visitor's local time with offset.
+VISITOR_OFFSETS = [(-480, 15), (-300, 45), (0, 15), (60, 15), (600, 10)]
 COUNTRIES = ["US", "CA", "GB", "DE", "FR", "AU", "NL", "IE"]
 PLANS = {"basic": 49.0, "pro": 149.0, "enterprise": 899.0}
 
 
 def iso(ts: datetime) -> str:
     return ts.strftime("%Y-%m-%dT%H:%M:%SZ")
+
+
+def local_iso(ts: datetime, offset_minutes: int) -> str:
+    """UTC instant -> local time with offset, e.g. 2026-05-01T09:15:00-05:00."""
+    local = ts.astimezone(timezone(timedelta(minutes=offset_minutes)))
+    return local.isoformat(timespec="seconds")
 
 
 def month_end(d: date) -> date:
@@ -119,7 +127,8 @@ def make_sessions(campaigns):
             campaign_id = ""
         ts = random_ts(day)
         rows.append({
-            "SessionID": f"S{i:06d}", "SessionStartUtc": iso(ts),
+            "SessionID": f"S{i:06d}",
+            "SessionStart": local_iso(ts, rng.choices(*zip(*VISITOR_OFFSETS))[0]),
             "TrafficSource": source, "Medium": medium, "CampaignID": campaign_id,
             "DeviceType": rng.choices(DEVICES, weights=[55, 40, 5])[0],
             "PageViews": max(1, int(rng.expovariate(1 / 3))),
@@ -186,7 +195,7 @@ def add_messy_rows(campaigns, ad_spend, sessions, leads, conversions):
     for s in rng.sample(sessions, 50):
         s["SessionID"] = ""
     for s in rng.sample(sessions, 50):
-        s["SessionStartUtc"] = "not available"
+        s["SessionStart"] = "not available"
 
     # leads: messy email casing/whitespace, missing country, duplicate
     for lead in rng.sample(leads, 15):
