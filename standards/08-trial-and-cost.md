@@ -9,6 +9,8 @@
 | Azure DevOps | Free for up to five users, unlimited private Git repos | — |
 | [Microsoft Learn](https://learn.microsoft.com/en-us/training/browse/?products=fabric) | Free Fabric training and tutorials | — |
 
+Step-by-step setup: [Getting started](../docs/getting-started.md).
+
 ## Rules during the trial
 
 1. **Connect the trial workspace to Git on day one.** When the trial ends, Fabric items go inactive; Git is how we keep the work.
