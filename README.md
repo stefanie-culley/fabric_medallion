@@ -8,6 +8,7 @@ This repository is the team's standard for building lakehouse solutions in **Mic
 
 | If you are… | Start with |
 |---|---|
+| Trying it out | [Getting started](docs/getting-started.md) |
 | New to the team | [01 Architecture](standards/01-architecture.md), then [02 Layer contracts](standards/02-layer-contracts.md) |
 | Building a new pipeline | [03 Naming](standards/03-naming.md), [04 Ingestion & orchestration](standards/04-ingestion-and-orchestration.md), the [templates](templates/) |
 | Reviewing a PR | [PR checklist](templates/pr-checklist.md) |
