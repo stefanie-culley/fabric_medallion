@@ -3,8 +3,14 @@
 This guide takes you from no Fabric account to sample data in Bronze and a clean `campaign` table in Silver. It takes about an hour.
 
 What you need:
-- A **work or school account** (Microsoft Entra ID). Personal addresses such as Gmail or Outlook.com can't start a Fabric trial. If you don't have one, see [Fabric trial](https://learn.microsoft.com/en-us/fabric/fundamentals/fabric-trial) for the options.
+- A **work or school account** (Microsoft Entra ID). Personal addresses such as Gmail or Outlook.com can't start a Fabric trial. No work account? Do step 0 first.
 - A **GitHub account** and a copy (fork) of this repo.
+
+## 0. No work account? Make one with Azure
+This is Microsoft's documented route ([Fabric trial with a personal email](https://learn.microsoft.com/en-us/fabric/fundamentals/free-trial-account-personal-email)). Background: [research notes](research/fabric-trial-without-work-account.md).
+1. Create an [Azure free account](https://azure.microsoft.com/en-us/pricing/purchase-options/azure-account) with your personal email. A card and phone may be needed for verification; you are not charged. This creates your own Entra directory, and you are its Global Administrator.
+2. In [entra.microsoft.com](https://entra.microsoft.com): **Users** → **New user** → **Create new user**. Set a password. No roles are needed.
+3. Copy the new user's **User principal name** (`<name>@<directory>.onmicrosoft.com`). Use this account for every step below.
 
 ## 1. Start the trial
 1. Go to [app.fabric.microsoft.com](https://app.fabric.microsoft.com) and sign in with your work or school account.
