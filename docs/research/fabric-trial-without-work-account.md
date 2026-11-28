@@ -143,3 +143,47 @@ These are not Microsoft guidance.
 - Why Fabric needs a new Entra member user instead of the personal Microsoft account that created the tenant.
 - What happens to a Fabric trial in a Microsoft 365 trial tenant after the Microsoft 365 trial ends at 30 days.
 - Current Microsoft 365 Business Premium price after the trial (the product page timed out).
+
+## 5. When the Fabric trial isn't available
+
+Researched 2026-11-27. The case: a new tenant from an Azure free account (Gmail sign-up), a new Entra member user with the Fabric administrator role, and both tenant settings on. **Start trial** shows "Your Power BI trial is active ... A Fabric trial isn't available for your account. See the Microsoft documentation for eligibility requirements." Only Power BI workspace licence options appear.
+
+### What Microsoft documents
+
+- **No published eligibility list.** The only eligibility statement is: "Trial eligibility depends on factors such as your tenant settings, license state, and the number of trial capacities available in your tenant. Microsoft determines trial availability by region and tenant, and availability can change over time." The next step it gives is "contact Microsoft Support" ([Fabric trial](https://learn.microsoft.com/en-us/fabric/fundamentals/fabric-trial), ms.date 2026-08-12, updated 2026-09-29).
+- **Documented reasons a trial can't start** (same page, FAQ "Why can't I start a trial?" and "How do I know if my tenant has reached its trial capacity limit?"):
+  - The Fabric administrator disabled trials. If **Start trial**, **Free trial** or **Trial status** is missing, "trials might be disabled for your tenant".
+  - The user already has a Power BI individual trial. Then **Start trial** may not show, and you start the Fabric trial "by attempting to create a Fabric item".
+  - The tenant "exhausted its limit of trial capacities". "Microsoft sets a limit on the number of trial capacities that can be created on a single tenant." The number is not published.
+  - Region. "Not all regions are available for the Fabric trial capacity"; check your [home region](https://learn.microsoft.com/en-us/fabric/admin/find-fabric-home-region). The same page also links region availability with the text "Fabric trial capacities are available in all regions", which conflicts.
+  - A repeat trial. "Eligibility for another trial isn't guaranteed, and Microsoft might restrict repeated or successive trial usage."
+- **Not mentioned anywhere in Microsoft docs:** tenant age, Azure free account tenants, self-service or "viral" tenants, or the exact message "A Fabric trial isn't available for your account". No official page for that message was found.
+- **The personal-email page has no troubleshooting section.** It still documents the Azure free account route without caveats and says "You don't have to set role assignments" ([Fabric trial with a personal email](https://learn.microsoft.com/en-us/fabric/fundamentals/free-trial-account-personal-email), ms.date 2026-02-27, updated 2026-04-08). So Microsoft has not documented withdrawing this route, but the page is older than some of the reports below.
+- **This setup already meets the documented settings.** **Users can create Fabric items** and **Users can try Microsoft Fabric paid features** are the only settings the trial page lists ([Fabric trial](https://learn.microsoft.com/en-us/fabric/fundamentals/fabric-trial)). That rules out the admin-setting cause and leaves the tenant-level decisions Microsoft does not publish.
+
+### What others report (community/unverified)
+
+None of these come from Microsoft staff. The Microsoft Q&A answers found were by an MVP/moderator, an independent advisor, or marked "AI answer".
+
+- **Tenant too new.** An independent advisor on Microsoft Q&A: "the tenant may be too new, as Microsoft enforces a cooling-off period that typically lasts around 90 days" ([Q&A 5622485](https://learn.microsoft.com/en-us/answers/questions/5622485/microsoft-fabric-trail-issue), 2025-11-14). Fabric community posts say Microsoft "has stopped supporting Fabric trial capacities for newly created Entra ID and Microsoft 365 tenants (less than 90 days)", because of "frequent creation of tenants solely for trial access" ([Fabric community thread](https://community.fabric.microsoft.com/t5/Fabric-platform/Unable-to-create-free-Microsoft-Fabric-trial-account-using-Azure/td-p/4403535), search snippet only; the page returned 403). Other posts say 60 days. **Unverified**; no Microsoft page states it.
+- **Trial tied to the identity.** An MVP: the trial "is tied to a user's global unique identifier (GUID) in Microsoft's licensing system", and "deleting/re-provisioning the tenant does not clear the user-level licensing history". The suggested fix is to ask support to reset trial eligibility ([Q&A 5616699](https://learn.microsoft.com/en-us/answers/questions/5616699/fabric-trial), 2025-11-10/11). **Unverified**, and it is unclear whether this applies to a brand-new Entra user.
+- **Power BI trial started, Fabric trial failed.** They are "two separate and independent trials", so the countdown can show the Power BI trial alone ([Fabric community thread](https://community.fabric.microsoft.com/t5/Fabric-platform/Cannot-activate-a-Fabric-Trial-Only-Power-BI-Trial-instead/m-p/4691693), search snippet only). This matches the message seen here.
+- **Other things people try:** create a Fabric item in My workspace to trigger the prompt (this is also Microsoft's Method 2), set the workspace licence mode to **Trial** under **Advanced**, or create a different user in an older tenant. No Microsoft source confirms that these work against a tenant-level block.
+
+### Fixes, cheapest first
+
+1. **Retry through Method 2.** Open My workspace and try to create a lakehouse or notebook, then "Follow the prompt to start a Fabric trial capacity" ([Fabric trial](https://learn.microsoft.com/en-us/fabric/fundamentals/fabric-trial)). It costs nothing. If no prompt appears, the tenant is blocked.
+2. **Open a support request.** This is the only next step Microsoft documents: "contact Microsoft Support" ([Fabric trial](https://learn.microsoft.com/en-us/fabric/fundamentals/fabric-trial)). Whether a free Azure tenant gets free support for this is **unverified**.
+3. **Wait.** Only community posts say the block lifts at 60 to 90 days of tenant age (**unverified**). Waiting for "propagation" or signing out and in is not documented as a fix for this message.
+4. **Pay for an F2 in the Azure portal.** Microsoft's steps: Azure portal > search *Microsoft Fabric* > **Create Fabric Capacity** > subscription, resource group, name, region, size **F2**, capacity administrator (must be in the tenant, not B2B) > in **Capacity overage**, turn it off > **Review + create** ([Buy Fabric capacity](https://learn.microsoft.com/en-us/fabric/enterprise/buy-capacity), ms.date 2026-11-19).
+   - First register the `Microsoft.Fabric` resource provider: "Before you provision your first capacity, or if your quota is 0, register the `Microsoft.Fabric` resource provider." Check quota under **Quotas** > **Microsoft Fabric**, and use **New Quota Request** if needed. "Quotas depend on your Azure subscription type" ([Fabric quotas](https://learn.microsoft.com/en-us/fabric/enterprise/fabric-quotas), ms.date 2026-11-20).
+   - Free account or upgrade: Microsoft does not say whether a free-account subscription can create a Fabric capacity or what its Fabric quota is (**unverified**). The $200 credit covers "services that aren't in the free list" but not Marketplace offers ([Azure free account](https://azure.microsoft.com/en-us/pricing/purchase-options/azure-account)). Fabric is billed on Azure meters, not through Marketplace (see the Retail Prices API in section 3), so the credit probably applies (**unverified**, inference).
+   - Limits of the free account: the spending limit is USD 200, and when it runs out "the services that you deployed are disabled". You remove it by upgrading to pay-as-you-go ([Azure spending limit](https://learn.microsoft.com/en-us/azure/cost-management-billing/manage/spending-limit), ms.date 2026-04-29). After 30 days the free account must move to pay-as-you-go or "your account and services will be disabled" ([Azure free account](https://azure.microsoft.com/en-us/pricing/purchase-options/azure-account)).
+   - Cost: $0.36 per hour in East US and $0 compute while paused (section 3). Power BI items outside My workspace still need Pro or a Power BI trial, which this user already has.
+5. **Microsoft 365 business trial route** (section 3). It creates another new tenant, so if the block is about tenant age it will most likely hit the same block (**unverified**, inference).
+
+### Unclear points
+
+- Whether Microsoft now blocks Fabric trials for new tenants, and from what date. Only community posts say so; Microsoft docs still present the Azure free account route as working.
+- Whether the block is per tenant, per user or per payment identity.
+- Whether a free-account Azure subscription has non-zero Fabric CU quota, and whether the $200 credit pays for an F2.
