@@ -17,9 +17,16 @@ This is Microsoft's documented route ([Fabric trial with a personal email](https
 2. Select your profile picture (top right) → **Start trial**, then confirm.
 3. Note the end date (60 days). See [08 Trial & cost](../standards/08-trial-and-cost.md) for the rules during the trial.
 
+### If the Fabric trial isn't available
+New directories are often refused ("A Fabric trial isn't available for your account"), even with the trial settings on. Microsoft doesn't say why ([research notes](research/fabric-trial-without-work-account.md)). Use a small paid capacity instead, paid from the Azure free credit:
+1. Sign in to [portal.azure.com](https://portal.azure.com) as your **work account** (the `onmicrosoft.com` user). A personal account can't create a capacity. If it sees no subscription, sign in as the personal account and give the work account **Contributor** on the subscription (**Access control (IAM)**).
+2. **Create a resource** → **Microsoft Fabric** → **Create**: size **F2**, a region near you, your work account as capacity administrator, **capacity overage Off**.
+3. Don't upgrade the subscription. On the free subscription, charges come out of the $200 credit and never reach your card.
+4. F2 costs about $0.36 per hour while **Active** and nothing while **Paused**. You pay for running time, not for queries. **Pause it** (capacity page → **Pause**) whenever you stop, and **Resume** before you start. Costs show in **Cost Management** 8–24 hours later.
+
 ## 2. Create the workspace
 1. **Workspaces** → **New workspace**. Name it `marketing-dev`.
-2. Under **Advanced**, choose the **Trial** license mode, then **Apply**.
+2. Under **Advanced**, choose the **Trial** license mode (or **Fabric** and your F2 capacity), then **Apply**.
 
 The trial uses one workspace. Test and prod workspaces come later ([ADR 0003](../adr/0003-workspace-per-environment.md)).
 
@@ -30,8 +37,9 @@ In `marketing-dev`, select **New item** → **Lakehouse** three times. Name them
 When the trial ends, items go inactive. Git is how you keep the work.
 1. In your fork on GitHub, create a branch named `dev`.
 2. Create a fine-grained personal access token for the fork with **Contents: Read and write**.
-3. In Fabric: workspace **settings** → **Git integration** → **GitHub**. Paste the token, then pick your fork, branch `dev` and folder `fabric`.
-4. Select **Connect and sync**.
+3. If **GitHub** is greyed out: **Admin portal** → **Tenant settings** → **Git integration**, enable **Users can synchronize workspace items with their Git repositories** and **Users can sync workspace items with GitHub repositories**. This needs the Fabric Administrator role.
+4. In Fabric: workspace **settings** → **Git integration** → **GitHub**. Paste the token, then pick your fork, branch `dev` and folder `fabric`.
+5. Select **Connect and sync**.
 
 Changes reach `main` by pull request ([07 DevOps](../standards/07-devops-and-environments.md)).
 
